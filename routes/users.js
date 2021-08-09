@@ -2,7 +2,9 @@ var express = require("express");
 var router = express.Router();
 var User = require("../models/User");
 var Supporter = require("../models/Supporter");
-
+var Team = require("../models/Team");
+var Collector = require("../models/Collector");
+var Center = require("../models/Collect_center");
 var { SendResetPasswordEmail } = require("../mailer");
 var { ContactUsEmail } = require("../mailer");
 var bcrypt = require("bcrypt");
@@ -93,6 +95,7 @@ router.post("/", async function (req, res, next) {
     res.send(error);
   }
 });
+/** Add Supporter **/
 
 router.post("/addsupp", upload, async function (req, res, next) {
   const obj = JSON.parse(JSON.stringify(req.body));
@@ -103,6 +106,7 @@ router.post("/addsupp", upload, async function (req, res, next) {
     Avatar: req.body.Avatar,
     Date_birth: obj.Date_birth,
     Address: obj.Address,
+    Team: obj.Team,
     Phone: obj.Phone,
   };
   var ids;
@@ -116,6 +120,94 @@ router.post("/addsupp", upload, async function (req, res, next) {
       Password: hashedPassword,
       Email: obj.Email,
       Role: "Supporter",
+      Active:1,
+    })
+  });
+  res.send("Done");
+});
+/** Add Team **/
+
+router.post("/addteam", upload, async function (req, res, next) {
+  const obj = JSON.parse(JSON.stringify(req.body));
+  const hashedPassword = await bcrypt.hash(obj.Password, 10);
+  const team = {
+    Name: obj.Name,
+    Sname: obj.Sname,
+    Region: obj.Region,
+    Address: obj.Address,
+    Phone: obj.Phone,
+    Logo: obj.Phone,
+
+  };
+  var ids;
+
+  //console.log(mynewdelivery);
+
+  Team.create(team).then((d) => {
+    (ids = d._id), console.log(ids);
+    User.create({
+      _id: d._id,
+      Password: hashedPassword,
+      Email: obj.Email,
+      Role: "Team",
+      Active:1,
+    })
+  });
+  res.send("Done");
+});
+
+/** Add Collector **/
+
+router.post("/addCollector", upload, async function (req, res, next) {
+  const obj = JSON.parse(JSON.stringify(req.body));
+  const hashedPassword = await bcrypt.hash(obj.Password, 10);
+  const collector = {
+    Name: obj.Name,
+    QrCode: obj.QrCode,
+    Center: obj.Center,
+    Phone: obj.Phone,
+    Address: obj.Address,
+  };
+  var ids;
+
+  //console.log(mynewdelivery);
+
+  Collector.create(collector).then((d) => {
+    (ids = d._id), console.log(ids);
+    User.create({
+      _id: d._id,
+      Password: hashedPassword,
+      Email: obj.Email,
+      Role: "Collector",
+      Active:1,
+    })
+  });
+  res.send("Done");
+});
+
+/** Add Collector **/
+
+router.post("/addCenter", upload, async function (req, res, next) {
+  const obj = JSON.parse(JSON.stringify(req.body));
+  const hashedPassword = await bcrypt.hash(obj.Password, 10);
+  const center = {
+    Name: obj.Name,
+    QrCode: obj.QrCode,
+    Region: obj.Region,
+    Phone: obj.Phone,
+    Address: obj.Address,
+  };
+  var ids;
+
+  //console.log(mynewdelivery);
+
+  Center.create(center).then((d) => {
+    (ids = d._id), console.log(ids);
+    User.create({
+      _id: d._id,
+      Password: hashedPassword,
+      Email: obj.Email,
+      Role: "Center",
       Active:1,
     })
   });
