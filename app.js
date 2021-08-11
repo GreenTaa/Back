@@ -10,6 +10,10 @@ var cors = require("cors");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
+var supporterRouter = require("./routes/supporters");
+var teamRouter = require("./routes/teams");
+var collectCenterRouter = require("./routes/collectCenters");
+var collectorRouter = require("./routes/collectors");
 
 //Users Router
 
@@ -41,6 +45,10 @@ app.use("/public", express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/supporters", supporterRouter);
+app.use("/teams", teamRouter);
+app.use("/collectCenters", collectCenterRouter);
+app.use("/collectors", collectorRouter);
 
 //Package & delivery Module's middlewares
 
@@ -48,6 +56,7 @@ app.use("/users", usersRouter);
 
 //User middlewares
 app.use("/users", usersRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
