@@ -69,10 +69,98 @@ router.get("/login", function (req, res, next) {
         console.log("WrongPassword");
         return res.send("WrongPassword");
       } else {
-        res.json(data);
+        console.log(data[0].Role);
+        Supporter.find(data[0]._id , function (err, doc) {
+          if (err) {
+            res.send(err);
+          } else {
+           if(data[0].Role=="Supporter"){
+            var o2 = {_id: data[0]._id ,Role: data[0].Role,Email:data[0].Email,Firstname:doc[0].Firstname,Lastname:doc[0].Lastname,Avatar:doc[0].Avatar,Phone:doc[0].Phone,Date_birth:doc[0].Date_birth,Address:doc[0].Address,Team:doc[0].Team};
+            res.send( o2);
+          }
+          else if(data[0].Role=="Team"){
+            var o2 = {_id: data[0]._id ,Role: data[0].Role,Email:data[0].Email,Name:doc[0].Name,Sname:doc[0].Sname,Region:doc[0].Region,Phone:doc[0].Phone,Logo:doc[0].Logo,Address:doc[0].Address};
+            res.send( o2);
+          }
+
+          else if(data[0].Role=="Collector"){
+            var o2 = {_id: data[0]._id ,Role: data[0].Role,Email:data[0].Email,Name:doc[0].Name,Center:doc[0].Center,Phone:doc[0].Phone,Date_birth:doc[0].Date_birth,Address:doc[0].Address};
+            res.send( o2);
+          }
+          else if(data[0].Role=="Center"){
+            var o2 = {_id: data[0]._id ,Role: data[0].Role,Email:data[0].Email,Name:doc[0].Name,Phone:doc[0].Phone,Date_birth:doc[0].Date_birth,Address:doc[0].Address};
+            res.send( o2);
+          }
+
+
+          }
+        })
+     
+
       }
     }
   );
+});
+
+router.get("/testih", function (req, res, next) {
+  
+   
+  User.aggregate([
+      // {$sort:{prix:{"prix":1}}},
+     
+       { $user: { createdAt: 0, __v: 0 } }
+
+   ]).sort({"updatedAt":-1})
+  
+  .then(Supporter => {
+
+     Ad.aggregate([
+   
+          { $user: {  createdAt: 0, __v: 0,lastUpdate:0} } ,
+        ]).sort({"updatedAt":-1}).then((ad) => {
+          console.log(ad);
+          lastDateAd=Math.floor(new Date(ad[0].updatedAt).getTime()/1000); 
+          ad.forEach(element => {
+              element.updatedAt = Math.floor(new Date(element.updatedAt).getTime()/1000);
+           });
+          
+          lastDate=Math.floor(new Date(products[0].updatedAt).getTime()/1000); 
+      products.forEach(element => {
+       
+        element.pourcentage=round(element.pourcentage,2)
+         element.updatedAt = Math.floor(new Date(element.updatedAt).getTime()/1000);
+         
+         //element.lastUpdate = Math.floor(new Date(element.lastUpdate).getTime()/1000);
+        
+         let arrPrix = element.prix
+          arrPrix.forEach(element=>{
+              element.updatedAt = Math.floor(new Date(element.updatedAt).getTime()/1000);
+              
+              
+          })
+          
+      
+       });
+
+          res.send({status:200,lastDate, message: "All the products & Ads", products ,lastDateAd, ad});
+        }).catch((err) => {
+          return res.status(500).send({
+              message: err.message || "Some error occurred while retrieving ads."
+          });
+        })
+    
+      
+      
+        
+
+      
+  }).catch(err => {
+      return res.status(500).send({
+          message: err.message || "Some error occurred while retrieving products."
+      });
+  });
+
+ 
 });
 
 
@@ -167,6 +255,7 @@ router.post("/addCollector", upload, async function (req, res, next) {
     Center: obj.Center,
     Phone: obj.Phone,
     Address: obj.Address,
+    Date_birth: obj.Date_birth,
   };
   var ids;
 

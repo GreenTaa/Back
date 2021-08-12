@@ -9,7 +9,7 @@ var Collector = new Schema(
     Center: String,
     Address: String,
     Phone: String,
-    Birthdate: String,
+    Date_birth: String,
     Active: String,
   },
   { timestamps: true }

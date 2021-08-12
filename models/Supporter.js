@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var Supporter = new Schema(
   {
     Id: String,
-    firstname: String,
+    Firstname: String,
     Lastname: String,
     Avatar: String,
     Date_birth: String,
