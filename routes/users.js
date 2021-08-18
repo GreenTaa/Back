@@ -71,6 +71,9 @@ router.get("/login", function (req, res, next) {
       } else {
         console.log(data[0].Role);
         Supporter.find(data[0]._id , function (err, doc) {
+          Team.find(data[0]._id , function (err, doc1) {
+            Collector.find(data[0]._id , function (err, doc2) {
+              Center.find(data[0]._id , function (err, doc3) {
           if (err) {
             res.send(err);
           } else {
@@ -79,22 +82,22 @@ router.get("/login", function (req, res, next) {
             res.send( o2);
           }
           else if(data[0].Role=="Team"){
-            var o2 = {_id: data[0]._id ,Role: data[0].Role,Email:data[0].Email,Name:doc[0].Name,Sname:doc[0].Sname,Region:doc[0].Region,Phone:doc[0].Phone,Logo:doc[0].Logo,Address:doc[0].Address};
+            var o2 = {_id: data[0]._id ,Role: data[0].Role,Email:data[0].Email,Name:doc1[0].Name,Sname:doc1[0].Sname,Region:doc1[0].Region,Phone:doc1[0].Phone,Logo:doc1[0].Logo,Address:doc1[0].Address};
             res.send( o2);
           }
 
           else if(data[0].Role=="Collector"){
-            var o2 = {_id: data[0]._id ,Role: data[0].Role,Email:data[0].Email,Name:doc[0].Name,Center:doc[0].Center,Phone:doc[0].Phone,Date_birth:doc[0].Date_birth,Address:doc[0].Address};
+            var o2 = {_id: data[0]._id ,Role: data[0].Role,Email:data[0].Email,Name:doc2[0].Name,Center:doc2[0].Center,Phone:doc2[0].Phone,Date_birth:doc2[0].Date_birth,Address:doc2[0].Address};
             res.send( o2);
           }
           else if(data[0].Role=="Center"){
-            var o2 = {_id: data[0]._id ,Role: data[0].Role,Email:data[0].Email,Name:doc[0].Name,Phone:doc[0].Phone,Date_birth:doc[0].Date_birth,Address:doc[0].Address};
+            var o2 = {_id: data[0]._id ,Role: data[0].Role,Email:data[0].Email,Name:doc3[0].Name,Phone:doc3[0].Phone,Date_birth:doc3[0].Date_birth,Address:doc3[0].Address};
             res.send( o2);
           }
 
 
           }
-        })
+        })})})})
      
 
       }
