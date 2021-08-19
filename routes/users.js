@@ -106,7 +106,7 @@ router.get("/login", function (req, res, next) {
 });
 
 router.get("/testih", function (req, res, next) {
-  
+  console.log("asma");
    
   User.aggregate([
       // {$sort:{prix:{"prix":1}}},
