@@ -94,6 +94,9 @@ router.post("/login", function (req, res, next) {
             var o2 = {_id: data[0]._id ,Role: data[0].Role,Email:data[0].Email,Name:doc3[0].Name,Phone:doc3[0].Phone,Date_birth:doc3[0].Date_birth,Address:doc3[0].Address};
             res.send( o2);
           }
+          else if(data[0].Role=="Admin"){
+            res.send( data[0]);
+          }
 
 
           }
@@ -161,6 +164,23 @@ router.post("/addsupp", upload, async function (req, res, next) {
       Active:1,
     })
   });
+  res.send("Done");
+});
+
+
+/** Add Admin **/
+
+router.post("/addadmin", upload, async function (req, res, next) {
+  const obj = JSON.parse(JSON.stringify(req.body));
+  const hashedPassword = await bcrypt.hash(obj.Password, 10);
+
+    User.create({
+      Password: hashedPassword,
+      Email: obj.Email,
+      Role: "Admin",
+      Active:1,
+    })
+  
   res.send("Done");
 });
 /** Add Team **/
