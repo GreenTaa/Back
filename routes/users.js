@@ -111,17 +111,12 @@ router.post("/login", function (req, res, next) {
   );
 });
 
-<<<<<<< HEAD
-router.get("/testih", function (req, res, next) {
-console.log(req.body);
-=======
 router.post("/testih", function (req, res, next) {
   
   console.log(req.body);
   res.send(req.body);
 
  
->>>>>>> main
 });
 
 
@@ -188,10 +183,6 @@ router.post("/", async function (req, res, next) {
     })
   });
   res.send("Done");
-<<<<<<< HEAD
-}); 
-   
-=======
 });
 
 
@@ -210,7 +201,6 @@ router.post("/addadmin", upload, async function (req, res, next) {
   
   res.send("Done");
 });
->>>>>>> main
 /** Add Team **/
 
 router.post("/addteam", upload, async function (req, res, next) {
