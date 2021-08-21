@@ -5,6 +5,7 @@ var Supporter = require("../models/Supporter");
 var Team = require("../models/Team");
 var Collector = require("../models/Collector");
 var Center = require("../models/Collect_center");
+const { cloudinary } = require('../utils/cloudinary');
 var { SendResetPasswordEmail } = require("../mailer");
 var { ContactUsEmail } = require("../mailer");
 var bcrypt = require("bcrypt");
@@ -106,64 +107,7 @@ router.get("/login", function (req, res, next) {
 });
 
 router.get("/testih", function (req, res, next) {
-  console.log("asma");
-   
-  User.aggregate([
-      // {$sort:{prix:{"prix":1}}},
-     
-       { $user: { createdAt: 0, __v: 0 } }
-
-   ]).sort({"updatedAt":-1})
-  
-  .then(Supporter => {
-
-     Ad.aggregate([
-   
-          { $user: {  createdAt: 0, __v: 0,lastUpdate:0} } ,
-        ]).sort({"updatedAt":-1}).then((ad) => {
-          console.log(ad);
-          lastDateAd=Math.floor(new Date(ad[0].updatedAt).getTime()/1000); 
-          ad.forEach(element => {
-              element.updatedAt = Math.floor(new Date(element.updatedAt).getTime()/1000);
-           });
-          
-          lastDate=Math.floor(new Date(products[0].updatedAt).getTime()/1000); 
-      products.forEach(element => {
-       
-        element.pourcentage=round(element.pourcentage,2)
-         element.updatedAt = Math.floor(new Date(element.updatedAt).getTime()/1000);
-         
-         //element.lastUpdate = Math.floor(new Date(element.lastUpdate).getTime()/1000);
-        
-         let arrPrix = element.prix
-          arrPrix.forEach(element=>{
-              element.updatedAt = Math.floor(new Date(element.updatedAt).getTime()/1000);
-              
-              
-          })
-          
-      
-       });
-
-          res.send({status:200,lastDate, message: "All the products & Ads", products ,lastDateAd, ad});
-        }).catch((err) => {
-          return res.status(500).send({
-              message: err.message || "Some error occurred while retrieving ads."
-          });
-        })
-    
-      
-      
-        
-
-      
-  }).catch(err => {
-      return res.status(500).send({
-          message: err.message || "Some error occurred while retrieving products."
-      });
-  });
-
- 
+console.log(req.body);
 });
 
 
@@ -188,13 +132,28 @@ router.post("/", async function (req, res, next) {
 });
 /** Add Supporter **/
 
-router.post("/addsupp", upload, async function (req, res, next) {
+ router.post("/addsupp", upload, async function (req, res, next) {
+  console.log("tesst");  
   const obj = JSON.parse(JSON.stringify(req.body));
+
+  var Avatar = "http://res.cloudinary.com/esprit456/image/upload/v1617904764/e-learning/id9xkfigxaozuwuimiox.png"//a logo default
+  
+  try {
+      const fileStr = req.body.Avatar
+       await cloudinary.uploader.upload(fileStr,{
+          upload_preset : 'supporter'
+      }).then((res)=>{
+          Avatar = res.url
+          console.log("photo added")
+      })
+  } catch (error) {
+      console.log(error)
+  }
   const hashedPassword = await bcrypt.hash(obj.Password, 10);
   const supp = {
     Firstname: obj.Firstname,
     Lastname: obj.Lastname,
-    Avatar: req.body.Avatar,
+    Avatar: Avatar,
     Date_birth: obj.Date_birth,
     Address: obj.Address,
     Team: obj.Team,
@@ -215,7 +174,8 @@ router.post("/addsupp", upload, async function (req, res, next) {
     })
   });
   res.send("Done");
-});
+}); 
+   
 /** Add Team **/
 
 router.post("/addteam", upload, async function (req, res, next) {
