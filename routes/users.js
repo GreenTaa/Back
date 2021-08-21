@@ -4,6 +4,8 @@ var User = require("../models/User");
 var Supporter = require("../models/Supporter");
 var Team = require("../models/Team");
 var Collector = require("../models/Collector");
+var ResetCode = require("../models/ResetCode");
+
 var Center = require("../models/Collect_center");
 const { cloudinary } = require('../utils/cloudinary');
 var { SendResetPasswordEmail } = require("../mailer");
@@ -55,7 +57,7 @@ router.get("/", function (req, res, next) {
   );
 });
 
-router.get("/login", function (req, res, next) {
+router.post("/login", function (req, res, next) {
   const email = req.body.Email;
   const password = req.body.Password;
 
@@ -95,6 +97,9 @@ router.get("/login", function (req, res, next) {
             var o2 = {_id: data[0]._id ,Role: data[0].Role,Email:data[0].Email,Name:doc3[0].Name,Phone:doc3[0].Phone,Date_birth:doc3[0].Date_birth,Address:doc3[0].Address};
             res.send( o2);
           }
+          else if(data[0].Role=="Admin"){
+            res.send( data[0]);
+          }
 
 
           }
@@ -106,8 +111,17 @@ router.get("/login", function (req, res, next) {
   );
 });
 
+<<<<<<< HEAD
 router.get("/testih", function (req, res, next) {
 console.log(req.body);
+=======
+router.post("/testih", function (req, res, next) {
+  
+  console.log(req.body);
+  res.send(req.body);
+
+ 
+>>>>>>> main
 });
 
 
@@ -161,7 +175,7 @@ router.post("/", async function (req, res, next) {
   };
   var ids;
 
-  //console.log(mynewdelivery);
+  console.log(supp);
 
   Supporter.create(supp).then((d) => {
     (ids = d._id), console.log(ids);
@@ -174,8 +188,29 @@ router.post("/", async function (req, res, next) {
     })
   });
   res.send("Done");
+<<<<<<< HEAD
 }); 
    
+=======
+});
+
+
+/** Add Admin **/
+
+router.post("/addadmin", upload, async function (req, res, next) {
+  const obj = JSON.parse(JSON.stringify(req.body));
+  const hashedPassword = await bcrypt.hash(obj.Password, 10);
+
+    User.create({
+      Password: hashedPassword,
+      Email: obj.Email,
+      Role: "Admin",
+      Active:1,
+    })
+  
+  res.send("Done");
+});
+>>>>>>> main
 /** Add Team **/
 
 router.post("/addteam", upload, async function (req, res, next) {
@@ -273,19 +308,103 @@ router.post("/resetPassword", async function (req, res, next) {
     if (user.length === 0) {
       return res.send("UserNotExist");
     }
-    const resetCode = await ResetCode.find({ Id: user[0].Id });
+    
+    const resetCode = await ResetCode.find({ Id: user[0]._id });
+ 
     if (resetCode.length != 0) {
       res.send("EmailAlreadySent");
     } else {
+      
       const code = user[0]._id.toString().substr(20, 24);
-      const newResetCode = new ResetCode({ Id: user[0].Id, Code: code });
+      console.log("aa");
+      const newResetCode = new ResetCode({ Id: user[0]._id, Code: code });
       await newResetCode.save();
-      SendResetPasswordEmail(user[0].Email, user[0].Username, user[0].Id, code);
+      SendResetPasswordEmail(user[0].Email, "wamyaflex", user[0]._id, code);
 
       res.send("EmailSended");
     }
   } catch (error) {
     res.send(error);
+  }
+});
+
+
+
+/** Reset User Password Confirmation **/
+router.post('/resetPassword/confirmation', async function(req,res,next){
+  const {Code, id, password} = req.body;
+  console.log(Code,id,password);
+  const hashedPassword = await bcrypt.hash(password,10);
+
+  try {
+      const resetCode = await ResetCode.find({Code: Code});
+      if (resetCode.length === 0) {
+          console.log("WrongCode");
+          return res.send("WrongCode");
+      }
+      else {
+          const user = await User.find({_id: id});
+          if (user.length === 0) {
+              console.log("Send Again");
+              return res.send("SendAgain");
+          }
+          else {
+              await ResetCode.deleteOne({Code: Code});
+              if(user[0].Role ==="Supporter"){
+              const newUser = new User({
+                  _id: id,
+                  Email: user[0].Email,
+                  Password: hashedPassword,
+                  Role: "Supporter"
+              });
+              await User.deleteOne({_id: id});
+              await User.create(newUser);
+              return res.send("PasswordUpdated");
+              }
+              else if(user[0].Role ==="Team")
+              {
+                const newUser = new User({
+                  _id: id,
+                  Email: user[0].Email,
+                  Password: hashedPassword,
+                  Role: "Team"
+              });
+                  await User.deleteOne({_id: id});
+                  await User.create(newUser);
+                  return res.send("PasswordUpdated");
+              }
+
+              else if(user[0].Role ==="Center")
+              {
+                const newUser = new User({
+                  _id: id,
+                  Email: user[0].Email,
+                  Password: hashedPassword,
+                  Role: "Center"
+              });
+                  await User.deleteOne({_id: id});
+                  await User.create(newUser);
+                  return res.send("PasswordUpdated");
+              }
+
+              else if(user[0].Role ==="Collector")
+              {
+                const newUser = new User({
+                  _id: id,
+                  Email: user[0].Email,
+                  Password: hashedPassword,
+                  Role: "Collector"
+              });
+                  await User.deleteOne({_id: id});
+                  await User.create(newUser);
+                  return res.send("PasswordUpdated");
+              }
+
+          }
+      }
+  }
+  catch (error){
+      res.send(error);
   }
 });
 
