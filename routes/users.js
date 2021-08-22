@@ -219,7 +219,7 @@ router.post("/addteam", upload, async function (req, res, next) {
   } catch (error) {
       console.log(error)
   }
-  
+
   const hashedPassword = await bcrypt.hash(obj.Password, 10);
   const team = {
     Name: obj.Name,
@@ -251,6 +251,21 @@ router.post("/addteam", upload, async function (req, res, next) {
 
 router.post("/addCollector", upload, async function (req, res, next) {
   const obj = JSON.parse(JSON.stringify(req.body));
+
+  var Avatar = "http://res.cloudinary.com/esprit456/image/upload/v1617904764/e-learning/id9xkfigxaozuwuimiox.png"//a logo default
+  
+  try {
+      const fileStr = req.body.Avatar
+       await cloudinary.uploader.upload(fileStr,{
+          upload_preset : 'supporter'
+      }).then((res)=>{
+          Avatar = res.url
+          console.log("photo added")
+      })
+  } catch (error) {
+      console.log(error)
+  }
+
   const hashedPassword = await bcrypt.hash(obj.Password, 10);
   const collector = {
     Name: obj.Name,
@@ -259,6 +274,7 @@ router.post("/addCollector", upload, async function (req, res, next) {
     Phone: obj.Phone,
     Address: obj.Address,
     Date_birth: obj.Date_birth,
+    Avatar: Avatar,
   };
   var ids;
 

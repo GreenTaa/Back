@@ -10,6 +10,7 @@ var Collector = new Schema(
     Address: String,
     Phone: String,
     Date_birth: String,
+    Avatar: String,
     Active: String,
   },
   { timestamps: true }
