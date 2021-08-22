@@ -205,6 +205,21 @@ router.post("/addadmin", upload, async function (req, res, next) {
 
 router.post("/addteam", upload, async function (req, res, next) {
   const obj = JSON.parse(JSON.stringify(req.body));
+
+  var Logo = "http://res.cloudinary.com/esprit456/image/upload/v1617904764/e-learning/id9xkfigxaozuwuimiox.png"//a logo default
+  
+  try {
+      const fileStr = req.body.Logo
+       await cloudinary.uploader.upload(fileStr,{
+          upload_preset : 'supporter'
+      }).then((res)=>{
+          Logo = res.url
+          console.log("photo added")
+      })
+  } catch (error) {
+      console.log(error)
+  }
+  
   const hashedPassword = await bcrypt.hash(obj.Password, 10);
   const team = {
     Name: obj.Name,
@@ -212,7 +227,7 @@ router.post("/addteam", upload, async function (req, res, next) {
     Region: obj.Region,
     Address: obj.Address,
     Phone: obj.Phone,
-    Logo: obj.Phone,
+    Logo: Logo,
 
   };
   var ids;
