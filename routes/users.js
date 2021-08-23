@@ -145,7 +145,7 @@ router.post("/", async function (req, res, next) {
   console.log("tesst");  
   const obj = JSON.parse(JSON.stringify(req.body));
 
-  var Avatar = "http://res.cloudinary.com/esprit456/image/upload/v1617904764/e-learning/id9xkfigxaozuwuimiox.png"//a logo default
+  var Avatar = "http://res.cloudinary.com/dkqbdhbrp/image/upload/v1629639337/teams/p0w14tfpxonfmbrjfnnj.jpg"//a logo default
   
   try {
       const fileStr = req.body.Avatar
@@ -206,12 +206,12 @@ router.post("/addadmin", upload, async function (req, res, next) {
 router.post("/addteam", upload, async function (req, res, next) {
   const obj = JSON.parse(JSON.stringify(req.body));
 
-  var Logo = "http://res.cloudinary.com/esprit456/image/upload/v1617904764/e-learning/id9xkfigxaozuwuimiox.png"//a logo default
+  var Logo = "http://res.cloudinary.com/dkqbdhbrp/image/upload/v1629639337/teams/p0w14tfpxonfmbrjfnnj.jpg"//a logo default
   
   try {
       const fileStr = req.body.Logo
        await cloudinary.uploader.upload(fileStr,{
-          upload_preset : 'supporter'
+          upload_preset : 'teams'
       }).then((res)=>{
           Logo = res.url
           console.log("photo added")
@@ -252,12 +252,12 @@ router.post("/addteam", upload, async function (req, res, next) {
 router.post("/addCollector", upload, async function (req, res, next) {
   const obj = JSON.parse(JSON.stringify(req.body));
 
-  var Avatar = "http://res.cloudinary.com/esprit456/image/upload/v1617904764/e-learning/id9xkfigxaozuwuimiox.png"//a logo default
+  var Avatar = "http://res.cloudinary.com/dkqbdhbrp/image/upload/v1629639337/teams/p0w14tfpxonfmbrjfnnj.jpg"//a logo default
   
   try {
       const fileStr = req.body.Avatar
        await cloudinary.uploader.upload(fileStr,{
-          upload_preset : 'supporter'
+          upload_preset : 'collectors'
       }).then((res)=>{
           Avatar = res.url
           console.log("photo added")
