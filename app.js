@@ -11,6 +11,8 @@ var cors = require("cors");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
+var trashRouter = require("./routes/trash");
+
 var supporterRouter = require("./routes/supporters");
 var teamRouter = require("./routes/teams");
 var collectCenterRouter = require("./routes/collectCenters");
@@ -47,6 +49,7 @@ app.use("/public", express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/trash", trashRouter);
 app.use("/supporters", supporterRouter);
 app.use("/teams", teamRouter);
 app.use("/collectCenters", collectCenterRouter);

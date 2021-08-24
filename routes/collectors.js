@@ -14,7 +14,9 @@ router.get("/", function (req, res, next) {
 router.get('/:id', function(req, res, next) {
     Collector.findById(req.params.id,function(err,data){
       if(err) throw err;
-      res.json(data);
+      if(data)
+      res.json(false);
+      else res.json(true);
     })
   });
 

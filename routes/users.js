@@ -164,6 +164,8 @@ router.post("/", async function (req, res, next) {
     Lastname: obj.Lastname,
     Avatar: Avatar,
     Date_birth: obj.Date_birth,
+    Bottles:0,
+    Score:0,
     Address: obj.Address,
     Team: obj.Team,
     Phone: obj.Phone,
