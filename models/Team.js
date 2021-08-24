@@ -10,6 +10,7 @@ var Team = new Schema(
     Address: String,
     Logo: String,
     Phone: String,
+    Score: Number,
     Active: String,
   },
   { timestamps: true }
