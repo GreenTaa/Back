@@ -33,3 +33,17 @@ router.delete('/:id',function(req, res, next) {
 })
 
 module.exports = router ;
+
+//Sort supporters by score 
+
+router.get('/triByScore', function(req, res, next) {
+  Team.find(function(err,data){
+    if(err) throw err;
+    res.json(data);
+  }).aggregate(
+    [
+      { $sort : { Score : 1 } }
+    ]
+  );
+});
+
