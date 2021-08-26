@@ -50,11 +50,22 @@ router.post("/addtrash", async function (req, res, next) {
     res.send("Done");
   });
 
-  router.post("/addbottle", async function (req, res, next) {
+   router.post("/addbottle",  async function (req, res, next) {
     const obj = JSON.parse(JSON.stringify(req.body));
-console.log( obj.id_supporter,obj.Bottles);
-    Supporter.update({_id: obj.id_supporter}, { $inc: { Bottles: obj.Bottles} });
-    res.send("Done");
+    const test = {
+        Bottles: obj.Bottles,
+      };
+      var simpbottles =parseInt(obj.Simpbottles) * 5;
+      var compbottles =parseInt(obj.Compbottles) * 10;
+      var bottles = parseInt(obj.Compbottles) + parseInt(obj.Simpbottles);
+      console.log(bottles);
+      var myscore =compbottles+simpbottles;
+
+       await Supporter.findByIdAndUpdate(
+        { _id: obj.id_supporter },
+        {$inc : {'Bottles' : bottles,'Score' : myscore}}
+     );
+       res.send("Done");
   });
 
 module.exports = router ;
