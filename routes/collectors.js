@@ -11,12 +11,15 @@ router.get("/", function (req, res, next) {
   });
 
 // Get Collector by ID
-router.get('/:id', function(req, res, next) {
+router.post('/:id', function(req, res, next) {
     Collector.findById(req.params.id,function(err,data){
-      if(err) throw err;
-      if(data)
-      res.json(false);
-      else res.json(true);
+      try {
+        if(data)
+        res.send(true);
+        else res.send(false);
+      } catch (error) {
+        res.send(error);
+      }
     })
   });
 
