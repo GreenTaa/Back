@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Supporter = require('../models/Supporter');
+const { cloudinary } = require('../utils/cloudinary');
 
 // Get all supporters
 router.get("/", function (req, res, next) {
@@ -19,26 +20,23 @@ router.get('/:id', function(req, res, next) {
   });
 
 // Modify supporter
-async (req, res, next) => {
-if(req.body.image.startsWith("http")){
-  Avatar = req.body.image
-}else{
-var Avatar = "http://res.cloudinary.com/dkqbdhbrp/image/upload/v1629639337/teams/p0w14tfpxonfmbrjfnnj.jpg"//a logo default
 
-try {
-  const fileStr = req.body.image
-  const uploadedResponse = await cloudinary.uploader.upload(fileStr,{
-      upload_preset : 'supporter'
-  })
-  Avatar = uploadedResponse.url
-} catch (error) {
-  console.log(error)
-}
-}
-}
 ////
-router.put('/:id', function(req, res, next) {
-    Supporter.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id })
+router.put('/:id', async function (req, res, next) {
+  var Avatar = "http://res.cloudinary.com/dkqbdhbrp/image/upload/v1629639337/teams/p0w14tfpxonfmbrjfnnj.jpg"//a logo default
+  
+  try {
+      const fileStr = req.body.Avatar
+       await cloudinary.uploader.upload(fileStr,{
+          upload_preset : 'supporter'
+      }).then((res)=>{
+          Avatar = res.url
+          console.log("photo added")
+      })
+  } catch (error) {
+      console.log(error)
+  }
+    Supporter.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id, Avatar: Avatar })
     .then(() => res.status(200).json({ msg: 'Supporter modified' }))
     .catch(err => res.status(400).json({ error: err }))
 })
