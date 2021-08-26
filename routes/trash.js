@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var Trash = require('../models/Trash_Bin');
-var Trash = require('../models/Supporter');
 const Supporter = require('../models/Supporter');
 
 
