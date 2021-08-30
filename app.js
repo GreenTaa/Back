@@ -17,6 +17,8 @@ var supporterRouter = require("./routes/supporters");
 var teamRouter = require("./routes/teams");
 var collectCenterRouter = require("./routes/collectCenters");
 var collectorRouter = require("./routes/collectors");
+var productRouter = require("./routes/products");
+var fileupload = require('express-fileupload'); 
 
 //Users Router
 
@@ -41,6 +43,7 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors());
 app.use(logger("dev"));
+app.use(fileupload({useTempFiles: true}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 /* app.use(bodyParser.json({ limit: "50mb" }));
@@ -54,6 +57,7 @@ app.use("/supporters", supporterRouter);
 app.use("/teams", teamRouter);
 app.use("/collectCenters", collectCenterRouter);
 app.use("/collectors", collectorRouter);
+app.use("/products", productRouter);
 
 //Package & delivery Module's middlewares
 

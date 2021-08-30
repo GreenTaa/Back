@@ -212,7 +212,6 @@ router.post("/addteam", upload, async function (req, res, next) {
   
   try {
       const fileStr = req.body.Logo
-      console.log(fileStr)
        await cloudinary.uploader.upload(fileStr,{
           upload_preset : 'teams'
       }).then((res)=>{

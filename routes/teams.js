@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Team = require('../models/Team');
+var User = require('../models/User');
 
 // Get all teams
 router.get("/", function (req, res, next) {
@@ -19,17 +20,31 @@ router.get('/:id', function(req, res, next) {
   });
 
 // Modify Team
-router.put('/:id', function(req, res, next) {
-    Team.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id })
+router.put('/:id', async function(req, res, next) {
+  var Avatar = "http://res.cloudinary.com/dkqbdhbrp/image/upload/v1629639337/teams/p0w14tfpxonfmbrjfnnj.jpg"//a logo default
+  
+  try {
+      const fileStr = req.body.Avatar
+       await cloudinary.uploader.upload(fileStr,{
+          upload_preset : 'supporter'
+      }).then((res)=>{
+          Avatar = res.url
+          console.log("photo added")
+      })
+  } catch (error) {
+      console.log(error)
+  }
+    Team.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id, Logo: Avatar  })
     .then(() => res.status(200).json({ msg: 'Team modified' }))
     .catch(err => res.status(400).json({ error: err }))
 })
 
 //Delete supporter 
 router.delete('/:id',function(req, res, next) {
-    Team.deleteOne({ _id: req.params.id })
+    (Team.deleteOne({ _id: req.params.id })
     .then(() => res.status(200).json({ msg: `Team with id : ${req.params.id} has been removed` }))
-    .catch(err => res.status(400).json({ error: err }))
+    .catch(err => res.status(400).json({ error: err })),
+    User.deleteOne({ _id: req.params.id }))
 })
 
 module.exports = router ;

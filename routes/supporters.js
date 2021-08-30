@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Supporter = require('../models/Supporter');
+var User = require('../models/User');
 const { cloudinary } = require('../utils/cloudinary');
 
 // Get all supporters
@@ -36,15 +37,17 @@ router.put('/:id', async function (req, res, next) {
   } catch (error) {
       console.log(error)
   }
-    Supporter.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id, Avatar: Avatar })
+    (Supporter.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id, Avatar: Avatar })
     .then(() => res.status(200).json({ msg: 'Supporter modified' }))
-    .catch(err => res.status(400).json({ error: err }))
+    .catch(err => res.status(400).json({ error: err })),
+    User.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id}))
 })
 
 //Delete supporter 
 router.delete('/:id',function(req, res, next) {
-    Supporter.deleteOne({ _id: req.params.id })
+    (Supporter.deleteOne({ _id: req.params.id })
     .then(() => res.status(200).json({ msg: `Supporter with id : ${req.params.id} has been removed` }))
-    .catch(err => res.status(400).json({ error: err }))
-})
+    .catch(err => res.status(400).json({ error: err })),
+    User.deleteOne({ _id: req.params.id }))
+  })
 module.exports = router;
