@@ -3,7 +3,7 @@ var router = express.Router();
 var Supporter = require('../models/Supporter');
 var User = require('../models/User');
 const { cloudinary } = require('../utils/cloudinary');
-
+var bcrypt = require("bcrypt");
 // Get all supporters
 router.get("/", function (req, res, next) {
     Supporter.find(function (err, data) {
@@ -24,6 +24,9 @@ router.get('/:id', function(req, res, next) {
 
 ////
 router.put('/:id', async function (req, res, next) {
+
+  const hashedPassword = await bcrypt.hash(req.body.Password ,10);
+  console.log(hashedPassword);
   var Avatar = "http://res.cloudinary.com/dkqbdhbrp/image/upload/v1629639337/teams/p0w14tfpxonfmbrjfnnj.jpg"//a logo default
   
   try {
@@ -37,10 +40,9 @@ router.put('/:id', async function (req, res, next) {
   } catch (error) {
       console.log(error)
   }
-    (Supporter.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id, Avatar: Avatar })
-    .then(() => res.status(200).json({ msg: 'Supporter modified' }))
-    .catch(err => res.status(400).json({ error: err })),
-    User.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id}))
+    Supporter.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id, Avatar: Avatar })
+    .then(User.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id, Password: hashedPassword }).then(() => res.status(200).json({ msg: 'Supporter modified' })))
+    .catch(err => res.status(400).json({ error: err }))
 })
 
 //Delete supporter 
