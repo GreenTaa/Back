@@ -28,9 +28,8 @@ router.put('/:id', function(req, res, next) {
 
 //Delete collect center 
 router.delete('/:id',function(req, res, next) {
-    (Collect.deleteOne({ _id: req.params.id })
+    Collect.deleteOne({ _id: req.params.id })
     .then(() => res.status(200).json({ msg: `Collect center with id : ${req.params.id} has been removed` }))
-    .catch(err => res.status(400).json({ error: err })),
-    User.deleteOne({ _id: req.params.id }))
+    .catch(err => res.status(400).json({ error: err }))
 })
 module.exports = router;

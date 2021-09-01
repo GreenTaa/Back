@@ -25,8 +25,6 @@ router.get('/:id', function(req, res, next) {
 ////
 router.put('/:id', async function (req, res, next) {
 
-  const hashedPassword = await bcrypt.hash(req.body.Password ,10);
-  console.log(hashedPassword);
   var Avatar = "http://res.cloudinary.com/dkqbdhbrp/image/upload/v1629639337/teams/p0w14tfpxonfmbrjfnnj.jpg"//a logo default
   
   try {
@@ -41,15 +39,14 @@ router.put('/:id', async function (req, res, next) {
       console.log(error)
   }
     Supporter.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id, Avatar: Avatar })
-    .then(User.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id, Password: hashedPassword }).then(() => res.status(200).json({ msg: 'Supporter modified' })))
+    .then(() => res.status(200).json({ msg: 'Supporter modified' }))
     .catch(err => res.status(400).json({ error: err }))
 })
 
 //Delete supporter 
 router.delete('/:id',function(req, res, next) {
-    (Supporter.deleteOne({ _id: req.params.id })
+    Supporter.deleteOne({ _id: req.params.id })
     .then(() => res.status(200).json({ msg: `Supporter with id : ${req.params.id} has been removed` }))
-    .catch(err => res.status(400).json({ error: err })),
-    User.deleteOne({ _id: req.params.id }))
+    .catch(err => res.status(400).json({ error: err }))
   })
 module.exports = router;

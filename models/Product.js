@@ -7,6 +7,7 @@ var Product = new Schema(
     Name: String,
     Picture: String,
     Team : String,
+    Category : String,
     Likes : Number,
     Points_Required: String,
   },

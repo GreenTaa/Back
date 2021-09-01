@@ -28,7 +28,7 @@ router.post('/', async function(req,res,next){
          await cloudinary.uploader.upload(fileStr,{
             upload_preset : 'collectors'
         }).then((res)=>{
-            Picture = res.url
+            Picture = res.url,
             console.log("photo added")
            
         })
