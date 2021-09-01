@@ -81,7 +81,7 @@ router.post("/login", function (req, res, next) {
             res.send(err);
           } else {
            if(data[0].Role=="Supporter"){
-            var o2 = {_id: data[0]._id ,Role: data[0].Role,Email:data[0].Email,Firstname:doc[0].Firstname,Lastname:doc[0].Lastname,Avatar:doc[0].Avatar,Phone:doc[0].Phone,Date_birth:doc[0].Date_birth,Address:doc[0].Address,Team:doc[0].Team};
+            var o2 = {_id: data[0]._id ,Role: data[0].Role,Email:data[0].Email,Firstname:doc[0].Firstname,Lastname:doc[0].Lastname,Avatar:doc[0].Avatar,Phone:doc[0].Phone,Date_birth:doc[0].Date_birth,Address:doc[0].Address,Team:doc[0].Team,Score:doc[0].Score};
             res.send( o2);
           }
           else if(data[0].Role=="Team"){

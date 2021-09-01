@@ -6,7 +6,11 @@ var Trash_Bin = new Schema(
     Id: String,
     State: String,
     Bottles:Number,
+    Status:String,
     Location: String,
+    Lng:String,
+    Lat:String,
+
   },
   { timestamps: true }
 );
