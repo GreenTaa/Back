@@ -41,6 +41,7 @@ router.post("/addtrash", async function (req, res, next) {
     const trash = {
       State: obj.State,
       Location: obj.Location,
+      Status: "0",
       Bottles: 0,
       
     };
