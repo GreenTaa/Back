@@ -72,24 +72,4 @@ router.delete('/:id',function(req, res, next) {
     .catch(err => res.status(400).json({ error: err }))
 })
 
-//Search by Team
-/* var search = {
-    get: function (req, res) {
-       var query = {};
-       if(req.query.locationQuery){
-         query.Team = { "$regex": req.query.locationQuery, "$options": "i" };
-       }
-   
-       Product.find(query, function(err, result) {
-           if (err) {
-               console.log('Not a Valid Search');
-               res.status(500).send(err, 'Not a Valid Search');
-           }else {
-               res.json(result);
-           }            
-       });
-    }
-   };
-
-router.get('/', search) */
 module.exports = router;
