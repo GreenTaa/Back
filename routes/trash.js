@@ -47,7 +47,6 @@ router.post("/addtrash", async function (req, res, next) {
       Bottles: 0,
       
     };
-  
     Trash.create(trash)
     res.send("Done");
   });

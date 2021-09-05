@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 
 var ResetCode = new Schema({
     Id: String,
+    Email: String,
     Code:String
 });
 

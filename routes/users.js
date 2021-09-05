@@ -172,8 +172,6 @@ router.post("/", async function (req, res, next) {
   };
   var ids;
 
-  console.log(supp);
-
   Supporter.create(supp).then((d) => {
     (ids = d._id), console.log(ids);
     User.create({
@@ -183,8 +181,10 @@ router.post("/", async function (req, res, next) {
       Role: "Supporter",
       Active:1,
     })
+    var o2 = {_id: d ,Role: "Supporter",Email:obj.Email,Firstname:obj.Firstname,Lastname:obj.Lastname,Avatar:Avatar,Date_birth:obj.Date_birth,Address:obj.Address,Team:obj.Team,Score:""};
+    res.send(o2);
   });
-  res.send("Done");
+  
 });
 
 
@@ -352,6 +352,33 @@ router.post("/resetPassword", async function (req, res, next) {
   }
 });
 
+router.post("/resetPasswordmobile", async function (req, res, next) {
+  const { Email } = req.body;
+  const user = await User.find({ Email: Email });
+  try {
+    if (user.length === 0) {
+      return res.send("UserNotExist");
+    }
+    
+    const resetCode = await ResetCode.find({ Id: user[0]._id });
+ 
+    if (resetCode.length != 0) {
+      res.send("EmailAlreadySent");
+    } else {
+      
+      const code = user[0]._id.toString().substr(20, 24);
+      console.log("aa");
+      const newResetCode = new ResetCode({ Id: user[0]._id, Code: code,Email:user[0].Email });
+      await newResetCode.save();
+      SendResetPasswordEmail(user[0].Email, "Greentaa", user[0]._id, code);
+
+      res.send("EmailSended");
+    }
+  } catch (error) {
+    res.send(error);
+  }
+});
+
 
 
 /** Reset User Password Confirmation **/
@@ -382,6 +409,86 @@ router.post('/resetPassword/confirmation', async function(req,res,next){
                   Role: "Supporter"
               });
               await User.deleteOne({_id: id});
+              await User.create(newUser);
+              return res.send("PasswordUpdated");
+              }
+              else if(user[0].Role ==="Team")
+              {
+                const newUser = new User({
+                  _id: id,
+                  Email: user[0].Email,
+                  Password: hashedPassword,
+                  Role: "Team"
+              });
+                  await User.deleteOne({_id: id});
+                  await User.create(newUser);
+                  return res.send("PasswordUpdated");
+              }
+
+              else if(user[0].Role ==="Center")
+              {
+                const newUser = new User({
+                  _id: id,
+                  Email: user[0].Email,
+                  Password: hashedPassword,
+                  Role: "Center"
+              });
+                  await User.deleteOne({_id: id});
+                  await User.create(newUser);
+                  return res.send("PasswordUpdated");
+              }
+
+              else if(user[0].Role ==="Collector")
+              {
+                const newUser = new User({
+                  _id: id,
+                  Email: user[0].Email,
+                  Password: hashedPassword,
+                  Role: "Collector"
+              });
+                  await User.deleteOne({_id: id});
+                  await User.create(newUser);
+                  return res.send("PasswordUpdated");
+              }
+
+          }
+      }
+  }
+  catch (error){
+      res.send(error);
+  }
+});
+
+
+
+router.post('/resetPassword/confirmationmobile', async function(req,res,next){
+  const {Code, password} = req.body;
+  console.log(Code,password);
+  const hashedPassword = await bcrypt.hash(password,10);
+  try {
+      const resetCode = await ResetCode.find({Code: Code});
+      if (resetCode.length === 0) {
+          console.log("WrongCode");
+          return res.send("WrongCode");
+      }
+     
+      else {
+       
+          const user = await User.find({Email: resetCode[0].Email});
+          if (user.length === 0) {
+              console.log("Send Again");
+              return res.send("SendAgain");
+          }
+          else {
+              await ResetCode.deleteOne({Code: Code});
+              if(user[0].Role ==="Supporter"){
+              const newUser = new User({
+                  _id: user[0]._id,
+                  Email: user[0].Email,
+                  Password: hashedPassword,
+                  Role: "Supporter"
+              });
+              await User.deleteOne({_id: user[0]._id});
               await User.create(newUser);
               return res.send("PasswordUpdated");
               }

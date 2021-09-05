@@ -64,13 +64,13 @@ exports.SendResetPasswordEmail = (Email ,Username, id,code) => {
     const message = {
         from: process.env.GOOGLE_USER,
         to: Email,
-        subject: 'Wamya - Reset Password',
+        subject: 'Greentaa - Reset Password',
         html: `
       <h3>Hello ${Username} </h3>
       <p>You reset Code : <strong>${code}</strong></p>
-      <p>To reset your password please follow this link: <a target="_" href="${process.env.DOMAIN_REACT}/ResetNewPassword/${id}">Reset Password Link</a></p>
+      <p>If you're using the web app  please follow this link: <a target="_" href="${process.env.DOMAIN_REACT}/ResetNewPassword/${id}">Reset Password Link</a></p>
       <p>Cheers,</p>
-      <p>Wamya Team</p>
+      <p>Greentaa  Team</p>
     `
     }
 
