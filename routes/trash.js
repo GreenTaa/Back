@@ -53,14 +53,10 @@ router.post("/addtrash", async function (req, res, next) {
 
    router.post("/addbottle",  async function (req, res, next) {
     const obj = JSON.parse(JSON.stringify(req.body));
-    const test = {
-        Bottles: obj.Bottles,
-      };
-      var simpbottles =parseInt(obj.Simpbottles) * 5;
-      var compbottles =parseInt(obj.Compbottles) * 10;
-      var bottles = parseInt(obj.Compbottles) + parseInt(obj.Simpbottles);
-      console.log(bottles);
-      var myscore =compbottles+simpbottles;
+    console.log(obj);
+       var Bottles = obj.Bottles;
+        var id_trash = obj.id_poubelle;
+      var myscore =parseInt(Bottles) * 10;
 
        await Supporter.findByIdAndUpdate(
         { _id: obj.id_supporter },
