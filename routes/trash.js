@@ -60,7 +60,7 @@ router.post("/addtrash", async function (req, res, next) {
 
        await Supporter.findByIdAndUpdate(
         { _id: obj.id_supporter },
-        {$inc : {'Bottles' : bottles,'Score' : myscore}}
+        {$inc : {'Bottles' : Bottles,'Score' : myscore}}
      );
        res.send("Done");
   });
