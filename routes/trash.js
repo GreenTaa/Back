@@ -64,5 +64,17 @@ router.post("/addtrash", async function (req, res, next) {
      );
        res.send("Done");
   });
+  router.post("/setprs",  async function (req, res, next) {
+    const obj = JSON.parse(JSON.stringify(req.body));
+    console.log(obj);
+       var trash = obj.id_poubelle;
+        var prs = obj.prs;
 
+       await Trash.findByIdAndUpdate(
+        trash,
+        {
+          $set: { Status: prs },
+        })
+       res.send("Done");
+  });
 module.exports = router ;
