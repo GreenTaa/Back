@@ -12,7 +12,8 @@ var Supporter = new Schema(
     Phone: String,
     Team:String,
     Bottles:Number,
-    Score: Number
+    Score: Number,
+    Whishlist: []
   },
   { timestamps: true }
 );

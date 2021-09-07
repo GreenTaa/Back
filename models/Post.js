@@ -6,6 +6,7 @@ var Post = new Schema(
     Id: String,
     Title: String,
     Content: String,
+    Picture: string
   },
   { timestamps: true }
 );

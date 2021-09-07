@@ -43,9 +43,9 @@ router.put('/:id', async function (req, res, next) {
 
 //Delete supporter 
 router.delete('/:id',function(req, res, next) {
-    User.deleteOne({ _id: req.params.id })
-    .then(User.deleteOne({ _id: req.params.id })).then(() => res.status(200).json({ msg: `Team with id : ${req.params.id} has been removed` }))
-    .catch(err => res.status(400).json({ error: err }))
+  Team.deleteOne({ _id: req.params.id })
+  .then(() => res.status(200).json({ msg: `Team with id : ${req.params.id} has been removed` }))
+  .catch(err => res.status(400).json({ error: err }))
 })
 
 module.exports = router ;
