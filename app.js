@@ -12,6 +12,7 @@ var cors = require("cors");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var trashRouter = require("./routes/trash");
+var postRouter = require("./routes/posts");
 
 var supporterRouter = require("./routes/supporters");
 var teamRouter = require("./routes/teams");
@@ -58,6 +59,7 @@ app.use("/teams", teamRouter);
 app.use("/collectCenters", collectCenterRouter);
 app.use("/collectors", collectorRouter);
 app.use("/products", productRouter);
+app.use("/posts", postRouter);
 
 //Package & delivery Module's middlewares
 
