@@ -62,6 +62,10 @@ router.post("/addtrash", async function (req, res, next) {
         { _id: obj.id_supporter },
         {$inc : {'Bottles' : Bottles,'Score' : myscore}}
      );
+     await Trash.findByIdAndUpdate(
+      { _id:id_trash },
+      {$inc : {'Bottles' : Bottles}}
+   );
        res.send("Done");
   });
   router.post("/setprs",  async function (req, res, next) {

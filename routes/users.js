@@ -494,7 +494,7 @@ router.post('/resetPassword/confirmationmobile', async function(req,res,next){
               }
               else if(user[0].Role ==="Team")
               {
-                const newUser = new User({
+                const newUser = new User({  
                   _id: id,
                   Email: user[0].Email,
                   Password: hashedPassword,
