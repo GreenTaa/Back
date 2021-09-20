@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var Trash = require('../models/Trash_Bin');
 const Supporter = require('../models/Supporter');
+const Hys = require('../models/history');
+const history = require('../models/history');
 
 
 // Get all teams
@@ -15,6 +17,13 @@ router.get("/", function (req, res, next) {
 // Get trash by ID
 router.get('/:id', function(req, res, next) {
     Trash.findById(req.params.id,function(err,data){
+      if(err) throw err;
+      res.json(data);
+    })
+  });
+
+  router.get('/history/:id', function(req, res, next) {
+    Hys.find({ Supp: req.params.id } ,function(err, data) {
       if(err) throw err;
       res.json(data);
     })
@@ -57,7 +66,12 @@ router.post("/addtrash", async function (req, res, next) {
        var Bottles = obj.Bottles;
         var id_trash = obj.id_poubelle;
       var myscore =parseInt(Bottles) * 10;
+      const myhistory = {
+        Supp: obj.id_supporter,
+        Bottles: Bottles,
+        Score: myscore
 
+      };
        await Supporter.findByIdAndUpdate(
         { _id: obj.id_supporter },
         {$inc : {'Bottles' : Bottles,'Score' : myscore}}
@@ -66,6 +80,7 @@ router.post("/addtrash", async function (req, res, next) {
       { _id:id_trash },
       {$inc : {'Bottles' : Bottles}}
    );
+   await Hys.create(myhistory);
        res.send("Done");
   });
   router.post("/setprs",  async function (req, res, next) {

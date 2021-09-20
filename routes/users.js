@@ -56,7 +56,12 @@ router.get("/", function (req, res, next) {
     }
   );
 });
-
+router.get('/usr/:id', function(req, res, next) {
+  User.findById(req.params.id,function(err,data){
+    if(err) throw err;
+    res.json(data);
+  })
+});
 router.post("/login", function (req, res, next) {
   const email = req.body.Email;
   const password = req.body.Password;
