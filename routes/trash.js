@@ -62,16 +62,24 @@ router.post("/addtrash", async function (req, res, next) {
 
    router.post("/addbottle",  async function (req, res, next) {
     const obj = JSON.parse(JSON.stringify(req.body));
-    console.log(obj);
+    var  mytrash;
        var Bottles = obj.Bottles;
         var id_trash = obj.id_poubelle;
       var myscore =parseInt(Bottles) * 10;
-      const myhistory = {
-        Supp: obj.id_supporter,
-        Bottles: Bottles,
-        Score: myscore
-
-      };
+     var history;
+      Trash.findById(id_trash,function(err,data){
+        if(err) throw err;
+        mytrash=data;
+        const myhistory = {
+          Supp: obj.id_supporter,
+          Bottles: Bottles,
+          Score: myscore,
+          Place:mytrash.Location
+        };
+        history = myhistory;
+      })
+     
+    
        await Supporter.findByIdAndUpdate(
         { _id: obj.id_supporter },
         {$inc : {'Bottles' : Bottles,'Score' : myscore}}
@@ -80,7 +88,8 @@ router.post("/addtrash", async function (req, res, next) {
       { _id:id_trash },
       {$inc : {'Bottles' : Bottles}}
    );
-   await Hys.create(myhistory);
+   await Hys.create(history);
+   console.log(mytrash.Location);
        res.send("Done");
   });
   router.post("/setprs",  async function (req, res, next) {

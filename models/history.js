@@ -6,6 +6,7 @@ var History = new Schema(
     Id: String,
     Bottles: String,
     Score: String,
+    Place: String,
     Supp: String,
   },
   { timestamps: true }
