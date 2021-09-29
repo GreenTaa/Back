@@ -26,13 +26,12 @@ var fileupload = require('express-fileupload');
 var app = express();
 require("dotenv").config();
 
-
 // mongo config
 mongoose
   .connect(config.mongo.uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+
+    
+    useUnifiedTopology: true, useNewUrlParser: true, useFindAndModify: false})
   .then(() => console.log("Connected to Mongo"))
   .catch((err) => console.log(err));
 
