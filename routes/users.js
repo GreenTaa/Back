@@ -307,6 +307,7 @@ router.post("/addCenter", upload, async function (req, res, next) {
   const obj = JSON.parse(JSON.stringify(req.body));
   const hashedPassword = await bcrypt.hash(obj.Password, 10);
   const center = {
+    Bottles:0,
     Name: obj.Name,
     QrCode: obj.QrCode,
     Region: obj.Region,
