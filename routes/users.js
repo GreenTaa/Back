@@ -144,6 +144,39 @@ router.post("/login", function (req, res, next) {
             });
           });
         });
+        Supporter.find(data[0]._id , function (err, doc) {
+          Team.find(data[0]._id , function (err, doc1) {
+            Collector.find(data[0]._id , function (err, doc2) {
+              Center.find(data[0]._id , function (err, doc3) {
+          if (err) {
+            res.send(err);
+          } else {
+           if(data[0].Role=="Supporter"){
+            var o2 = {_id: data[0]._id ,Role: data[0].Role,Email:data[0].Email,Firstname:doc[0].Firstname,Lastname:doc[0].Lastname,Avatar:doc[0].Avatar,Phone:doc[0].Phone,Date_birth:doc[0].Date_birth,Address:doc[0].Address,Team:doc[0].Team,Score:doc[0].Score,Whishlist:doc[0].Whishlist};
+            res.send( o2);
+          }
+          else if(data[0].Role=="Team"){
+            var o2 = {_id: data[0]._id ,Role: data[0].Role,Email:data[0].Email,Name:doc1[0].Name,Sname:doc1[0].Sname,Region:doc1[0].Region,Phone:doc1[0].Phone,Logo:doc1[0].Logo,Address:doc1[0].Address};
+            res.send( o2);
+          }
+
+          else if(data[0].Role=="Collector"){
+            var o2 = {_id: data[0]._id ,Role: data[0].Role,Email:data[0].Email,Name:doc2[0].Name,Center:doc2[0].Center,Phone:doc2[0].Phone,Date_birth:doc2[0].Date_birth,Address:doc2[0].Address};
+            res.send( o2);
+          }
+          else if(data[0].Role=="Center"){
+            var o2 = {_id: data[0]._id ,Role: data[0].Role,Email:data[0].Email,Name:doc3[0].Name,Phone:doc3[0].Phone,Date_birth:doc3[0].Date_birth,Address:doc3[0].Address};
+            res.send( o2);
+          }
+          else if(data[0].Role=="Admin"){
+            res.send( data[0]);
+          }
+
+
+          }
+        })})})})
+     
+
       }
     }
   );

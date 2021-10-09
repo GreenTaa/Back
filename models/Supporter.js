@@ -7,13 +7,13 @@ var Supporter = new Schema(
     Firstname: String,
     Lastname: String,
     Avatar: String,
+    Whishlist: [],
     Date_birth: String,
     Address: String,
     Phone: String,
     Team:String,
     Bottles:Number,
-    Score: Number,
-    Whishlist: []
+    Score: Number
   },
   { timestamps: true }
 );
