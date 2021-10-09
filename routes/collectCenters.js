@@ -32,4 +32,18 @@ router.delete('/:id',function(req, res, next) {
     .then(() => res.status(200).json({ msg: `Collect center with id : ${req.params.id} has been removed` }))
     .catch(err => res.status(400).json({ error: err }))
 })
+
+router.post("/addtrash/:id", async (req, res) => {
+  try {
+    const Collects = await Collect.findByIdAndUpdate(
+      req.params.id,
+      { $push: { Trashs: req.body.trash } },
+      { new: true }
+    );
+    res.json(Collects);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "internal server err" });
+  }
+});
 module.exports = router;
