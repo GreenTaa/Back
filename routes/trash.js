@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var Trash = require("../models/Trash_Bin");
+var Team = require("../models/Team");
 
 const Supporter = require("../models/Supporter");
 const Hys = require("../models/history");
@@ -12,7 +13,7 @@ router.get("/", function (req, res, next) {
   Trash.find(function (err, data) {
     if (err) throw err;
     res.json(data);
-  });
+  })  .populate("State");
 });
 
 // router.get("/alls", function (req, res, next) {
@@ -111,10 +112,18 @@ router.post("/addbottle", async function (req, res, next) {
     history = myhistory;
   });
 
-  await Supporter.findByIdAndUpdate(
+  const suppt = await Supporter.findByIdAndUpdate(
     { _id: obj.id_supporter },
-    { $inc: { Bottles: Bottles, Score: myscore } }
+    { $inc: { Bottles: Bottles, Score: myscore }  },{new:true}
   );
+  console.log(suppt);
+
+  await Team.findOneAndUpdate(
+    { Sname: suppt.Team },
+    { $inc: { Score: myscore } }
+  );
+
+
   await Trash.findByIdAndUpdate(
     { _id: id_trash },
     { $inc: { Bottles: Bottles } }
