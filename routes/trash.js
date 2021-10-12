@@ -143,4 +143,15 @@ router.post("/setprs", async function (req, res, next) {
   });
   res.send("Done");
 });
+
+
+router.put("/:id/:idpbl", async (req, res) => {
+  const updatetrash = await Trash.findByIdAndUpdate(req.params.id,{State:req.params.idpbl}, {new:true});
+  const updatecenter = await Center.findByIdAndUpdate(
+    req.params.idpbl,
+    { $push: { Trashs: req.params.id} },
+    { new: true }
+  );
+   res.json({ message: "todo updated succesfully" });
+ });
 module.exports = router;
