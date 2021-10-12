@@ -16,7 +16,7 @@ router.get('/:id', function(req, res, next) {
     Collect.findById(req.params.id,function(err,data){
       if(err) throw err;
       res.json(data);
-    })
+    }).populate('Trashs')
   });
 
 // Modify collect center

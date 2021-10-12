@@ -74,6 +74,8 @@ router.post("/login", function (req, res, next) {
         console.log(data);
         return res.send("UserNotFound");
       } else if ((await bcrypt.compare(password, data[0].Password)) === false) {
+        console.log(password);
+
         console.log("WrongPassword");
         return res.send("WrongPassword");
       } else {

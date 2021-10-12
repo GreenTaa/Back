@@ -1,6 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var Collector = require('../models/Collector');
+var Center = require('../models/Collect_center');
+var User = require('../models/User');
+
+const { cloudinary } = require("../utils/cloudinary");
+var bcrypt = require("bcrypt");
 
 // Get all Collectors
 router.get("/", function (req, res, next) {
@@ -22,6 +27,54 @@ router.post('/:id', function(req, res, next) {
       }
     })
   });
+
+//add collector from center
+router.post("/addCollector/:id", async function (req, res, next) {
+  const obj = JSON.parse(JSON.stringify(req.body));
+
+  var Avatar =
+    "http://res.cloudinary.com/dkqbdhbrp/image/upload/v1629639337/teams/p0w14tfpxonfmbrjfnnj.jpg"; //a logo default
+
+
+  const hashedPassword = await bcrypt.hash(obj.Password, 10);
+  const collector = {
+    Name: obj.Name,
+    QrCode: obj.QrCode,
+    Center: req.params.id,
+    Phone: obj.Phone,
+    Address: obj.Address,
+    Date_birth: obj.Date_birth,
+    Avatar: Avatar,
+  };
+  var ids;
+
+
+  const mynew = await Collector.create(collector).then((d) => {
+    (ids = d._id), console.log(ids);
+    User.create({
+      _id: d._id,
+      Password: hashedPassword,
+      Email: obj.Email,
+      Role: "Collector",
+      Active: 1,
+    });
+  });
+
+
+  try {
+    const addnew = await Center.findByIdAndUpdate(
+      req.params.id,
+      { $push: { Collectors: ids } },
+      { new: true }
+    );
+    res.json(addnew);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "internal server err" });
+  }
+
+  res.send(addnew);
+});
 
 // Modify Collector
 router.put('/:id', function(req, res, next) {

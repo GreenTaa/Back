@@ -11,7 +11,8 @@ var Collect_center = new Schema(
     Address: String,
     Phone: String,
     Bottles: Number,
-    Trashs: [{ type: Schema.Types.ObjectId, ref: 'trash_bins' }],
+    Collectors :  [{ type: Schema.Types.ObjectId, ref: 'Collector' }],
+    Trashs: [{ type: Schema.Types.ObjectId, ref: 'Trash_Bin' }],
     Active: String
   },
   { timestamps: true }

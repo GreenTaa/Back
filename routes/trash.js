@@ -45,6 +45,8 @@ router.get("/alls", function (req, res, next) {
 });
 
 
+
+
 // Get trash by ID
 router.get("/:id", function (req, res, next) {
   Trash.findById(req.params.id, function (err, data) {
