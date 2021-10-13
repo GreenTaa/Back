@@ -8,6 +8,7 @@ var Collector = new Schema(
     QrCode: String,
     Center: String,
     Address: String,
+    Bottels:0,
     Phone: String,
     Date_birth: String,
     Avatar: String,

@@ -44,6 +44,7 @@ router.post("/addCollector/:id", async function (req, res, next) {
     Phone: obj.Phone,
     Address: obj.Address,
     Date_birth: obj.Date_birth,
+    Bottels:0,
     Avatar: Avatar,
   };
   var ids;

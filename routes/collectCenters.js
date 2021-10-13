@@ -12,11 +12,9 @@ router.get("/", function (req, res, next) {
   });
 
 // Get collect center by ID
-router.get('/:id', function(req, res, next) {
-    Collect.findById(req.params.id,function(err,data){
-      if(err) throw err;
-      res.json(data);
-    }).populate('Trashs')
+router.get('/:id',async (req, res) =>  {
+  const myagents = await Collect.findById(req.params.id).populate("Trashs").populate("Collectors");
+  res.send([myagents]);
   });
 
 // Modify collect center
@@ -41,7 +39,7 @@ router.post("/addtrash/:id", async (req, res) => {
       { new: true }
     );
     res.json(Collects);
-  } catch (err) {
+  } catch (err) {   
     console.log(err);
     res.status(500).json({ message: "internal server err" });
   }
